@@ -1,0 +1,8 @@
+psycopg2
+sqlalchemy
+pandas
+yaml-config
+seaborn==0.9.0
+sklearn
+xgboost
+imblearn
