@@ -1,0 +1,77 @@
+log: True
+model:
+  mode: train
+  files:
+    model: 'model.pkl'
+    columns: 'column.pkl'
+    scaler: 'scaler.pkl'
+  data_value:
+    test_size: 0.2
+    features_not_dummy: ['created_date', 'birth_year', 'has_email',
+                         'source_minos', 'first_success',
+                         'country_gb', 'diff_date', 'has_transactions', 'cnt_currency']
+    features_dummy: ['terms_version', 'type_freq', 'state_freq', 'kyc']
+    label: ['is_fraudster']
+    na:
+      terms_version: '2000-01-01'
+      default: -1
+  fit_value:
+    n_splits: 10
+    model: 'RF'
+    sampling: 'combine'
+    params:
+      criterion: entropy
+      min_samples_leaf: 3
+      n_estimators: 10
+insert_all: True
+tables:
+  users:
+    file: 'train_users.csv'
+    extra_file: 'train_fraudsters.csv'
+    insert: False
+    columns: ['id',
+              'has_email',
+              'phone_country',
+              'is_fraudster',
+              'terms_version',
+              'created_date',
+              'state',
+              'country',
+              'birth_year',
+              'kyc',
+              'failed_sign_in_attempts']
+  transactions:
+    file: 'train_transactions.csv'
+    extra_file: 'countries.csv'
+    insert: False
+    columns: ['id',
+              'currency',
+              'amount',
+              'state',
+              'created_date',
+              'merchant_category',
+              'merchant_country',
+              'entry_method',
+              'user_id',
+              'type',
+              'source']
+  currency_details:
+    file: 'currency_details.csv'
+    extra_file: ''
+    insert: False
+    columns: ['ccy',
+              'iso_code',
+              'exponent',
+              'is_crypto']
+  fx_rates:
+    file: 'fx_rates.csv'
+    extra_file: ''
+    insert: True
+    columns: ['ts',
+              'base_ccy',
+              'ccy',
+              'rate']
+files_sql:
+  users_tenusd: 'users_tenusd.sql'
+
+
